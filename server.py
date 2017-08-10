@@ -10,27 +10,32 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
-    query = "SELECT * FROM users WHERE email = :email"
-    email = mysql.query_db(query)
-    if email is request.form['email']:
-        return redirect('/wall', email)
+    email=request.form['email']
+    print email
+    query = "SELECT * FROM users WHERE email = :specific_id"
+    data = {"specific_id":email}
+    response = mysql.query_db(query,data)
+    print response[0]['email']
+
+    
+    if response[0]['email'] == email:
+        return redirect('/wall')
     else:
-        return redirect('/', message = "Invalid Login: Please register")
+        return redirect('/')
 @app.route('/register', methods =['POST'])
 def register():
-    # Write query as a string. Notice how we have multiple values
-    # we want to insert into our query.
+    print "HEY LISTEN!"
+    
     query = "INSERT INTO users (first_name, last_name, email, created_at, updated_at) VALUES (:first_name, :last_name, :email, NOW(), NOW())"
-    # We'll then create a dictionary of data from the POST data received.
-    data = {
-             'first_name': request.form['first_name'],
-             'last_name':  request.form['last_name'],
-             'email': request.form['email']
-           }
-    # Run query, with dictionary values injected into the query.
-    mysql.query_db(query, data)
-    return redirect('/login')
+    print query
+    data = {"first_name": request.form['first_name'], "last_name": request.form['last_name'], "email": request.form['email']}
+    print "im tryin to print:",data
+
+    print mysql.query_db(query, data)
+    
+    # print "im about to redirect"
+    return redirect('/')
 @app.route('/wall')
-def load(user_id):
-    pass
+def wall():
+    return render_template("wall.html")
 app.run(debug=True)
