@@ -1,0 +1,11 @@
+-- All messages for User
+-- select messages.message, users.first_name, users.last_name, messages.created_at
+-- from users
+-- JOIN messages on users.id = messages.users_id
+-- where users.id = 1
+
+-- All Comments for a message
+-- select messages.message, users.first_name, users.last_name, comments.comment, comments.created_at
+-- from messages
+-- JOIN comments on comments.messages_id = messages.id
+-- JOIN users on messages.users_id = users.id
